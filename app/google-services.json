@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "760968016683",
+    "project_id": "t14-2025joseantoniolopez",
+    "storage_bucket": "t14-2025joseantoniolopez.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:760968016683:android:59413f6a6d999cbe628b6e",
+        "android_client_info": {
+          "package_name": "net.iessochoa.joseantoniolopez.t14_firebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFlNS4w43w9pODUG5WkukKfsQeY6O_2Ks"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
