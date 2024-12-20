@@ -22,7 +22,9 @@ fun AppNavigation(){
             )
         }
         composable<LoginScreenDestination> {
-            LoginScreen()
+            LoginScreen(
+
+            )
         }
         composable<SingUpScreenDestination> {
             SingUpScreen()
