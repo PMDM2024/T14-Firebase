@@ -26,7 +26,7 @@ import net.iessochoa.joseantoniolopez.t14_firebase.R
 @Composable
 fun StarUpScreen(
     navigateToLogin: () -> Unit = {},
-    navigateToSingUp: () -> Unit = {}
+    navigateToRegister: () -> Unit = {}
 ){
 Column(
     modifier = Modifier
@@ -43,13 +43,13 @@ Column(
     )
     Spacer(modifier = Modifier.weight(1f))
     Image(
-        painter = painterResource(id = R.drawable.logo_ochoa),
+        painter = painterResource(id = R.drawable.logo),
         contentDescription = "Logo",
         modifier = Modifier.size(300.dp)
     )
     Spacer(modifier = Modifier.weight(1f))
     Button(
-        onClick = navigateToSingUp
+        onClick = navigateToRegister
         ,
         modifier = Modifier
             .fillMaxWidth()

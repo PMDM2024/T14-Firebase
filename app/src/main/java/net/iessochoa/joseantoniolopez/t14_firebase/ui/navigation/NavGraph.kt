@@ -5,7 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.login.LoginScreen
-import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.signup.SingUpScreen
+import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.Register.RegisterScreen
 import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.starup.StarUpScreen
 
 @Composable
@@ -18,7 +18,7 @@ fun AppNavigation(){
         composable<StarUpScreenDestination> {
             StarUpScreen(
                 navigateToLogin = { navController.navigate(LoginScreenDestination) },
-                navigateToSingUp = { navController.navigate(SingUpScreenDestination) }
+                navigateToRegister = { navController.navigate(RegisterScreenDestination) }
             )
         }
         composable<LoginScreenDestination> {
@@ -26,8 +26,8 @@ fun AppNavigation(){
 
             )
         }
-        composable<SingUpScreenDestination> {
-            SingUpScreen()
+        composable<RegisterScreenDestination> {
+            RegisterScreen()
 
         }
 

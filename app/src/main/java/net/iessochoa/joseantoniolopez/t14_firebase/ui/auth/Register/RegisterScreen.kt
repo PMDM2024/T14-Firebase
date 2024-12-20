@@ -1,4 +1,4 @@
-package net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.login
+package net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.Register
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -9,13 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -27,21 +22,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import net.iessochoa.joseantoniolopez.t14_firebase.R
 import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.AuthState
 import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.AuthViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.muestraEstado
 import net.iessochoa.joseantoniolopez.t14_firebase.ui.components.PasswordOutLinedTextField
 
 @Composable
-fun LoginScreen(
+fun RegisterScreen(
     onLoginSuccess: () -> Unit = {},
     viewModel: AuthViewModel = viewModel()
 ) {
@@ -49,6 +40,8 @@ fun LoginScreen(
 
     var email by remember { mutableStateOf("pepe@correo.es") }
     var password by remember { mutableStateOf("123456") }
+    var confirmPassword by remember { mutableStateOf("123456") }
+
 
 
     Column(
@@ -66,7 +59,7 @@ fun LoginScreen(
         )
         Spacer(modifier = Modifier.weight(1f))
         Text(
-            text = "Iniciar Sesión",
+            text = "Crear nueva cuenta",
             style = MaterialTheme.typography.displayMedium
         )
         Spacer(modifier = Modifier.weight(1f))
@@ -87,28 +80,40 @@ fun LoginScreen(
         PasswordOutLinedTextField(
             label = "Contraseña",
             password,
-            { password = it },
-
+            { password = it }
+        )
+        PasswordOutLinedTextField(
+            label = "Repite Contraseña",
+            confirmPassword,
+            { confirmPassword = it }
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = {
-            viewModel.login(email, password)
+            if (password == confirmPassword) {
+                viewModel.register(email, password)
+            }else
+                viewModel.contrasenyaNoConciden()
+
         }) {
-            Text("Login")
+            Text("Registrarse")
         }
         Spacer(modifier = Modifier.height(16.dp))
+
         muestraEstado(uiState, onLoginSuccess)
-        /*when (uiState) {
+       /* when (uiState) {
             is AuthState.Idle -> {}
             is AuthState.Loading -> CircularProgressIndicator()
             is AuthState.Success -> {
                 Text("Login successful!")
                 onLoginSuccess()
             }
-
+            is AuthState.ErrorContrasenyaNoConciden -> {
+                Text("Las contraseñas no coinciden",color = MaterialTheme.colorScheme.error)
+            }
             is AuthState.Error -> Text(
-                (uiState as AuthState.Error).exception,
+                (uiState as AuthState.Error).exception,color = MaterialTheme.colorScheme.error
             )
+
         }*/
         Spacer(modifier = Modifier.weight(1f))
     }
