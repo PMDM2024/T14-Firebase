@@ -10,3 +10,9 @@ object RegisterScreenDestination
 
 @Serializable
 object StarUpScreenDestination
+
+@Serializable
+object HomeScreenDestination
+
+@Serializable
+object PrincipalScreenDestination

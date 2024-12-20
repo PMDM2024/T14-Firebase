@@ -37,9 +37,6 @@ class AuthViewModel: ViewModel(){
 
         }
     }
-
-
-
     fun register(email: String, password: String) {
         _uiState.value = AuthState.Loading
 
@@ -93,21 +90,4 @@ sealed class AuthState {
     object ErrorContrasenyaNoConciden : AuthState()
 
     data class Error(val exception: String) : AuthState()
-}
-@Composable
-fun muestraEstado(uiState: AuthState, onLoginSuccess: () -> Unit){
-    when (uiState) {
-        is AuthState.Idle -> {}
-        is AuthState.Loading -> CircularProgressIndicator()
-        is AuthState.Success -> {
-            Text("Login successful!")
-            onLoginSuccess()
-        }
-        is AuthState.ErrorContrasenyaNoConciden -> {
-            Text("Las contraseñas no coinciden",color = MaterialTheme.colorScheme.error)
-        }
-        is AuthState.Error -> Text(
-            (uiState as AuthState.Error).exception,color = MaterialTheme.colorScheme.error
-        )
-    }
 }

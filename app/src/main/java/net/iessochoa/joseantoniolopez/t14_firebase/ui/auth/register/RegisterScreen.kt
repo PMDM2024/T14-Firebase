@@ -1,6 +1,7 @@
-package net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.Register
+package net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.register
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,8 +10,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -26,13 +29,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import net.iessochoa.joseantoniolopez.t14_firebase.R
-import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.AuthState
 import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.AuthViewModel
-import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.muestraEstado
-import net.iessochoa.joseantoniolopez.t14_firebase.ui.components.PasswordOutLinedTextField
+import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.components.Encabezado
+import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.components.Logo
+import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.components.MuestraEstado
+import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.components.PasswordOutLinedTextField
 
 @Composable
 fun RegisterScreen(
+    onBack: () -> Unit = {},
     onLoginSuccess: () -> Unit = {},
     viewModel: AuthViewModel = viewModel()
 ) {
@@ -51,18 +56,13 @@ fun RegisterScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Spacer(modifier = Modifier.weight(1f))
-        Image(
-            painter = painterResource(id = R.drawable.logo),
-            contentDescription = "Logo",
-            modifier = Modifier.size(300.dp)
+        Encabezado(
+            onBack = onBack,
+            titulo = "Crear nueva cuenta",
+            modifier = Modifier.weight(1f)
+                .fillMaxWidth()
         )
-        Spacer(modifier = Modifier.weight(1f))
-        Text(
-            text = "Crear nueva cuenta",
-            style = MaterialTheme.typography.displayMedium
-        )
-        Spacer(modifier = Modifier.weight(1f))
+
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
@@ -70,13 +70,7 @@ fun RegisterScreen(
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(8.dp))
-        /*OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Password") },
-            visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth()
-        )*/
+
         PasswordOutLinedTextField(
             label = "Contraseña",
             password,
@@ -91,7 +85,7 @@ fun RegisterScreen(
         Button(onClick = {
             if (password == confirmPassword) {
                 viewModel.register(email, password)
-            }else
+            } else
                 viewModel.contrasenyaNoConciden()
 
         }) {
@@ -99,23 +93,9 @@ fun RegisterScreen(
         }
         Spacer(modifier = Modifier.height(16.dp))
 
-        muestraEstado(uiState, onLoginSuccess)
-       /* when (uiState) {
-            is AuthState.Idle -> {}
-            is AuthState.Loading -> CircularProgressIndicator()
-            is AuthState.Success -> {
-                Text("Login successful!")
-                onLoginSuccess()
-            }
-            is AuthState.ErrorContrasenyaNoConciden -> {
-                Text("Las contraseñas no coinciden",color = MaterialTheme.colorScheme.error)
-            }
-            is AuthState.Error -> Text(
-                (uiState as AuthState.Error).exception,color = MaterialTheme.colorScheme.error
-            )
+        MuestraEstado(uiState, onLoginSuccess)
 
-        }*/
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.height(100.dp))
     }
 }
 

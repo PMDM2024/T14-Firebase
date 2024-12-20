@@ -1,4 +1,4 @@
-package net.iessochoa.joseantoniolopez.t14_firebase.ui.components
+package net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Icon
