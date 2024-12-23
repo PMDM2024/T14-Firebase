@@ -25,6 +25,7 @@ import net.iessochoa.joseantoniolopez.t14_firebase.ui.components.AppBar
 
 /**
  * representa la pantalla principal de la aplicación.
+ * La modificáis según vuestras necesidades
  */
 @Composable
 fun PrincipalScreen(
@@ -34,8 +35,9 @@ fun PrincipalScreen(
 {
     //añadimos una acción a la barra de navegación para salir de la app
    val accionesBarra=listOf(
+       //Acción de cerrar sesión
         ActionItem(
-            name = "Salir",
+            name = "Cerra Sesión",
             icon = Icons.Filled.ExitToApp,
             action = {
                 viewModel.logout()

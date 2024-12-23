@@ -38,14 +38,15 @@ fun StarUpScreen(
     navigateToRegister: () -> Unit = {}, // Navegación hacia la pantalla de registro
     navigateToPrincipal: () -> Unit = {}, // Navegación hacia la pantalla principal
     viewModel: AuthViewModel = viewModel(),
-
     ) {
+    //si ya está loggeado vamos  a la pantalla principal
     if (viewModel.estaLogueado()) {
+        //evitamos que cargue varias veces la pantalla principal
         if (!viewModel.iniciadaSesion) {
             viewModel.iniciadaSesion = true
             navigateToPrincipal()
         }
-    } else {
+    } else {//si no está loggeado cargamos la pantalla de inicio
         Column(
             modifier = Modifier
                 .fillMaxSize()
