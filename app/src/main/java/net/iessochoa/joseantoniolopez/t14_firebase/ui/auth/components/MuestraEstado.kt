@@ -38,7 +38,25 @@ fun MuestraEstado(uiState: AuthState) {
                 color = MaterialTheme.colorScheme.error // Aplica color de error del tema actual
             )
         }
+        is AuthState.ErrorCamposVacios -> {
+            Text(
+                text = "Rellena todos los campos", // Muestra el error
+                color = MaterialTheme.colorScheme.error // Aplica color de error del tema actual
+            )
 
+        }
+        is AuthState.ErrorEmailIncorrecto -> {
+            Text(
+                text = "Email incorrecto", // Muestra el error
+                color = MaterialTheme.colorScheme.error // Aplica color de error del tema actual
+            )
+        }
+        is AuthState.ErrorEmailMenor -> {
+            Text(
+                text = "La contraseña debe tener al menos 6 caracteres", // Muestra el error
+                color = MaterialTheme.colorScheme.error // Aplica color de error del tema actual
+            )
+        }
         // Estado de error genérico, muestra el mensaje de error proporcionado
         is AuthState.Error -> {
             Text(

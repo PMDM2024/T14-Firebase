@@ -1,6 +1,5 @@
 package net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.login
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -8,9 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,17 +18,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import net.iessochoa.joseantoniolopez.t14_firebase.R
 import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.AuthViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.AuthState
 import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.components.Encabezado
-import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.components.Logo
 
 import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.components.MuestraEstado
 import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.components.PasswordOutLinedTextField
+import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.components.esCorrectoEmail
 
 /**
  * Composable que representa la pantalla de inicio de sesión.
@@ -45,7 +40,8 @@ import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.components.PasswordOu
 fun LoginScreen(
     onBack: () -> Unit = {}, // Acción por defecto para el botón "Atrás"
     onLoginSuccess: () -> Unit = {}, // Acción por defecto para el éxito en el inicio de sesión
-    viewModel: AuthViewModel = viewModel() // ViewModel para la autenticación
+    viewModel: AuthViewModel = viewModel(), // ViewModel para la autenticación
+    onResetPassword: () -> Unit={}
 ) {
     // Estado actual de la autenticación observado desde el ViewModel
     val uiState by viewModel.uiState.collectAsState()
@@ -90,9 +86,21 @@ fun LoginScreen(
 
         // Botón para iniciar sesión
         Button(onClick = {
-            viewModel.login(email, password) // Llama al método de inicio de sesión del ViewModel
+            //si no son correctos los campos muestra un error
+            if(email.isEmpty()||password.isEmpty())
+                viewModel.camposVacios()
+            else if(!esCorrectoEmail(email))
+                viewModel.emailIncorrecto()
+            else //  inicio de sesión
+                viewModel.login(email, password)
         }) {
             Text("Login") // Texto dentro del botón
+        }
+        // Vamos a recuperar la contraseña
+        Button(onClick = {
+           onResetPassword()
+        }) {
+            Text("Restablecer contraseña") // Texto dentro del botón
         }
         Spacer(modifier = Modifier.height(16.dp)) // Espacio entre elementos
 

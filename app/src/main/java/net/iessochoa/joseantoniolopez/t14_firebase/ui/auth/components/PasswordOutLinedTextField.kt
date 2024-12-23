@@ -19,7 +19,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import net.iessochoa.joseantoniolopez.t14_firebase.R
 /**
- * Composable que representa un campo de texto con diseño de contorno para ingresar contraseñas.
+ * Composable que representa un campo de texto para ingresar contraseñas.
  * Incluye un ícono representativo a la izquierda y una funcionalidad para mostrar u ocultar la contraseña.
  *
  * @param label Etiqueta que describe el propósito del campo de texto. Valor predeterminado: "Contraseña".
@@ -70,4 +70,7 @@ fun PasswordOutLinedTextField(
         // Modificador para personalizar el diseño del campo
         modifier = modifier
     )
+}
+fun esCorrectoEmail(email: String): Boolean {
+    return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
 }

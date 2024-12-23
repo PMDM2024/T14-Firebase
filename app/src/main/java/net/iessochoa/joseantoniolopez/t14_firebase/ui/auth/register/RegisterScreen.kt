@@ -26,6 +26,7 @@ import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.AuthViewModel
 import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.components.Encabezado
 import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.components.MuestraEstado
 import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.components.PasswordOutLinedTextField
+import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.components.esCorrectoEmail
 
 /**
  * Composable que representa la pantalla de registro de usuario.
@@ -99,12 +100,20 @@ fun RegisterScreen(
 
         // Botón para realizar el registro.
         Button(onClick = {
-            if (password == confirmPassword) {
+            //si no son correctos los campos muestra un error
+            if(email.isEmpty()||password.isEmpty()||confirmPassword.isEmpty()||displayName.isEmpty())
+                viewModel.camposVacios()
+            else if(!esCorrectoEmail(email))
+                viewModel.emailIncorrecto()
+            else if (password != confirmPassword) {
                 // Si las contraseñas coinciden, llama al método de registro del ViewModel.
-                viewModel.register(email, password,displayName)
-            } else {
-                // Si no coinciden, actualiza el estado para mostrar el error correspondiente.
                 viewModel.contrasenyaNoConciden()
+            } else if (password.length < 6) {
+                viewModel.contrasenyaMenor()
+
+            }
+            else {//registramos al usuario
+                viewModel.register(email, password,displayName)
             }
         }) {
             Text("Registrarse") // Texto del botón.
@@ -115,10 +124,9 @@ fun RegisterScreen(
         if (uiState is AuthState.Success) {
             // Evita múltiples llamados a `onRegisterSuccess` durante recomposiciones.
             if (!viewModel.iniciadaSesion) {
-
                 onRegisterSuccess() // Navega a la siguiente pantalla.
                 viewModel.iniciadaSesion = true // Marca la sesión como iniciada.
-               // viewModel.registraDisplayName(u)
+
             }
         } else {
             // Muestra el estado actual de la autenticación (cargando, error, etc.).

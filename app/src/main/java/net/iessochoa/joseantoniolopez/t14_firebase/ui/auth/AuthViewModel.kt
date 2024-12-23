@@ -69,7 +69,21 @@ class AuthViewModel : ViewModel() {
             }
         }
     }
-
+    /**
+     * Restablece la contraseña para el usuario con el email proporcionado.
+     * Actualiza el estado de la UI según el resultado de la operación.
+     */
+    fun resetPassword(email: String) {
+        _uiState.value = AuthState.Loading // Cambia el estado a "Cargando"
+        viewModelScope.launch {
+            val result = Repository.resetPassword(email) // Realiza la solicitud de registro
+            _uiState.value = if (result.isSuccess) {
+                AuthState.Success // Registro exitoso
+            } else {
+                estadoError(result) // Manejo de errores específicos
+            }
+        }
+    }
     /**
      * Maneja los diferentes tipos de errores que pueden ocurrir durante las operaciones de autenticación.
      * Regresa el estado de error correspondiente basado en la excepción.
@@ -91,6 +105,11 @@ class AuthViewModel : ViewModel() {
             Log.e("AuthViewModel", "Error: usuario ya registrado")
             AuthState.Error("Usuario ya existe")
         }
+
+        is IllegalArgumentException -> {
+            Log.e("AuthViewModel", "Error: ${result.exceptionOrNull()}")
+            AuthState.Error("Error: email incorrecto")
+        }
         else -> {
             Log.e("AuthViewModel", "Error desconocido: ${result.exceptionOrNull()}")
             AuthState.Error("Error desconocido")
@@ -103,42 +122,26 @@ class AuthViewModel : ViewModel() {
     fun contrasenyaNoConciden() {
         _uiState.value = AuthState.ErrorContrasenyaNoConciden
     }
-
+    fun camposVacios() {
+        _uiState.value = AuthState.ErrorCamposVacios
+    }
+    fun emailIncorrecto() {
+        _uiState.value = AuthState.ErrorEmailIncorrecto
+    }
+    fun contrasenyaMenor() {
+        _uiState.value = AuthState.ErrorEmailMenor
+    }
     /**
      * Realiza el cierre de sesión del usuario actual.
      */
     fun logout() {
         Repository.logout()
     }
-
-    fun registraDisplayName() {
-        //Repository.logout()
-        /*val user = Repository.getCurrentUser()
-        val profileUpdates = UserProfileChangeRequest.Builder()
-            .setDisplayName("Jose Antonio")
-            .build()
-        viewModelScope.launch {
-            val result = Repository.login(email, password) // Realiza la solicitud de login
-            _uiState.value = if (result.isSuccess) {
-                AuthState.Success // Login exitoso
-            } else {
-                estadoError(result) // Manejo de errores específicos
-            }
-        }
-*/
+    fun estaLogueado(): Boolean {
+        return Repository.estaLogueado()
     }
 }
 
-/**
- * Clase sellada que representa los diferentes estados de la autenticación.
- * Es parecido a un Enum pero con más opciones.
- */
-sealed class AuthState {
-    object Idle : AuthState() // Estado inicial sin actividad
-    object Loading : AuthState() // Estado de carga
-    object Success : AuthState() // Estado de éxito
-    object ErrorContrasenyaNoConciden : AuthState() // Error: contraseñas no coinciden
 
-    // Estado de error genérico con un mensaje asociado
-    data class Error(val exception: String) : AuthState()
-}
+
+

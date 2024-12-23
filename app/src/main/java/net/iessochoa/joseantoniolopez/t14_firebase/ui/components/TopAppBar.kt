@@ -74,7 +74,7 @@ fun AppBar(
 }
 
 /**
- * Nos permite crear las acciones del menúde la TopAppBar
+ * Nos permite crear las acciones del menú de la TopAppBar
  */
 data class ActionItem(
     val name: String,
