@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navOptions
 import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.login.LoginScreen
 import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.register.RegisterScreen
 
@@ -12,8 +11,18 @@ import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.starup.StarUpScreen
 import net.iessochoa.joseantoniolopez.t14_firebase.ui.principalscreen.PrincipalScreen
 
 @Composable
-fun AppNavigation(){
+fun AppNavigation() {
     val navController = rememberNavController()
+    //lambda que nos permite navegar a la pantalla Principal de la App una vez se haya logueado
+    val onLogin_RegistroExitoso = {
+        navController.navigate(
+            PrincipalScreenDestination
+        ) {//Una vez se haya logueado se eliminan de la pila las pantallas de inicio de sesion
+            popUpTo(LoginScreenDestination) { inclusive = true }
+            popUpTo(StarUpScreenDestination) { inclusive = true }
+
+        }
+    }
     NavHost(
         navController = navController,
         startDestination = StarUpScreenDestination
@@ -27,35 +36,32 @@ fun AppNavigation(){
         composable<LoginScreenDestination> {
             LoginScreen(
                 onBack = { navController.popBackStack() },
-                onLoginSuccess = {
-                    navController.navigate(
-                        PrincipalScreenDestination
-                    ) /*{
-                        popUpTo(LoginScreenDestination) { inclusive = true }
-                        popUpTo(StarUpScreenDestination) { inclusive = true }
+                onLoginSuccess = onLogin_RegistroExitoso
+            )
+        }
 
-                    }*/
+        composable<RegisterScreenDestination> {
+            RegisterScreen(
+                onBack = { navController.popBackStack() },
+                onRegisterSuccess = onLogin_RegistroExitoso
+            )
+        }
+        //Pantalla principal de la App
+        composable<PrincipalScreenDestination> {
+
+            PrincipalScreen(
+                //si cierra sesion se vuelve a la pantalla de inicio
+                onLogout = {
+                    navController.navigate(
+                        StarUpScreenDestination
+                    ) {
+                        //eliminamos de la pila la pantalla actual de la pila
+                        popUpTo(PrincipalScreenDestination) { inclusive = true }
+                    }
+
                 }
             )
-            composable<RegisterScreenDestination> {
-                RegisterScreen(
-                    onBack = { navController.popBackStack() },
-                )
-            }
-            composable<PrincipalScreenDestination> {
-                PrincipalScreen(
-                    onLogout = {
-                        navController.navigate(
-                            StarUpScreenDestination
-                        ) {
-                            //eliminamos de la pila la pantalla actual
-                            popUpTo(PrincipalScreenDestination) { inclusive = true }
-                        }
-
-                    }
-                )
-            }
-
         }
+
     }
 }

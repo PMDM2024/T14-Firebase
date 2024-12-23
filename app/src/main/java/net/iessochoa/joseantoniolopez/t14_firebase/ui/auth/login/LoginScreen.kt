@@ -26,62 +26,87 @@ import androidx.compose.ui.unit.dp
 import net.iessochoa.joseantoniolopez.t14_firebase.R
 import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.AuthViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.AuthState
 import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.components.Encabezado
 import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.components.Logo
 
 import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.components.MuestraEstado
 import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.components.PasswordOutLinedTextField
 
+/**
+ * Composable que representa la pantalla de inicio de sesión.
+ * Gestiona el estado de la autenticación y proporciona una interfaz interactiva para ingresar email y contraseña.
+ *
+ * @param onBack Callback que se ejecuta cuando el usuario presiona el botón "Atrás".
+ * @param onLoginSuccess Callback que se ejecuta cuando el inicio de sesión es exitoso.
+ * @param viewModel Instancia de `AuthViewModel` para gestionar la lógica de autenticación.
+ */
 @Composable
 fun LoginScreen(
-    onBack: () -> Unit = {},
-    onLoginSuccess: () -> Unit = {},
-    viewModel: AuthViewModel = viewModel()
+    onBack: () -> Unit = {}, // Acción por defecto para el botón "Atrás"
+    onLoginSuccess: () -> Unit = {}, // Acción por defecto para el éxito en el inicio de sesión
+    viewModel: AuthViewModel = viewModel() // ViewModel para la autenticación
 ) {
+    // Estado actual de la autenticación observado desde el ViewModel
     val uiState by viewModel.uiState.collectAsState()
 
-    var email by remember { mutableStateOf("pepe@correo.es") }
-    var password by remember { mutableStateOf("123456") }
+    // Estados locales para el email y la contraseña
+    var email by remember { mutableStateOf("pepe@correo.es") } // Email inicial de ejemplo
+    var password by remember { mutableStateOf("123456") } // Contraseña inicial de ejemplo
 
-
+    // Estructura de la interfaz
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+            .fillMaxSize() // Ocupa todo el tamaño disponible
+            .padding(16.dp), // Espaciado alrededor
+        horizontalAlignment = Alignment.CenterHorizontally, // Alineación horizontal centrada
+        verticalArrangement = Arrangement.Center // Alineación vertical centrada
     ) {
+        // Encabezado con botón "Atrás" y título
         Encabezado(
             onBack = onBack,
             titulo = "Iniciar Sesión",
-            modifier = Modifier.weight(1f)
-                .fillMaxWidth()
+            modifier = Modifier
+                .weight(1f) // Ocupa un peso proporcional dentro del contenedor
+                .fillMaxWidth() // Ocupa todo el ancho disponible
         )
+
+        // Campo de texto para el email
         OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
-            label = { Text("Email") },
-            modifier = Modifier.fillMaxWidth()
+            value = email, // Texto actual del campo
+            onValueChange = { email = it }, // Actualización del texto ingresado
+            label = { Text("Email") }, // Etiqueta para el campo
+            modifier = Modifier.fillMaxWidth() // Campo ocupa todo el ancho disponible
         )
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp)) // Espacio entre elementos
 
+        // Campo de texto personalizado para la contraseña
         PasswordOutLinedTextField(
-            label = "Contraseña",
-            password,
-            { password = it },
-
+            label = "Contraseña", // Etiqueta para el campo
+            password = password, // Contraseña actual
+            onValueChange = { password = it } // Actualización de la contraseña
         )
-        Spacer(modifier = Modifier.height(16.dp))
-        //login
-        Button(onClick = {
-            viewModel.login(email, password)
-        }) {
-            Text("Login")
-        }
+        Spacer(modifier = Modifier.height(16.dp)) // Espacio entre elementos
 
-        Spacer(modifier = Modifier.height(16.dp))
-        MuestraEstado(uiState, onLoginSuccess)
-        Spacer(modifier = Modifier.height(100.dp))
+        // Botón para iniciar sesión
+        Button(onClick = {
+            viewModel.login(email, password) // Llama al método de inicio de sesión del ViewModel
+        }) {
+            Text("Login") // Texto dentro del botón
+        }
+        Spacer(modifier = Modifier.height(16.dp)) // Espacio entre elementos
+
+        // Manejo del estado de éxito en la autenticación
+        if (uiState is AuthState.Success) {
+            // Evita múltiples llamados a `onLoginSuccess` durante recomposiciones
+            if (!viewModel.iniciadaSesion) {
+                onLoginSuccess() // Navega a la siguiente pantalla
+                viewModel.iniciadaSesion = true // Marca la sesión como iniciada
+            }
+        } else {
+            // Muestra el estado actual de la autenticación (cargando, error, etc.)
+            MuestraEstado(uiState)
+        }
+        Spacer(modifier = Modifier.height(100.dp)) // Espacio final
     }
 }
-

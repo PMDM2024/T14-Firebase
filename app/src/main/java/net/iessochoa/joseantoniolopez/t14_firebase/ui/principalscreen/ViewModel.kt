@@ -9,11 +9,14 @@ import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.AuthState
 
 class PrincipalViewModel: ViewModel()
 {
-    private val _uiState = MutableStateFlow<UiStatePrincipal>(UiStatePrincipal(email = getUserEmail()!!))
+    private val _uiState = MutableStateFlow(UiStatePrincipal(email = getUserEmail()))
     val uiState: StateFlow<UiStatePrincipal> = _uiState.asStateFlow()
 
     fun logout() {
         Repository.logout()
     }
-    fun getUserEmail() = Repository.getCurrentUser()!!.email
+    fun getUserEmail(): String  {
+        val user= Repository.getCurrentUser()
+        return "${user?.displayName} - ${ user?.email}"
+    }
 }
