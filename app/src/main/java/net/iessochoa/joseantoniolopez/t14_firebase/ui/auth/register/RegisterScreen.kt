@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.android.play.integrity.internal.u
 import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.AuthState
 import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.AuthViewModel
 import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.components.Encabezado
@@ -68,31 +69,31 @@ fun RegisterScreen(
         )
         OutlinedTextField(
             value = displayName, // Valor actual del email.
-            onValueChange = { displayName = it }, // Callback para actualizar el email.
-            label = { Text("Nombre") }, // Etiqueta del campo.
-            modifier = Modifier.fillMaxWidth() // Ocupa todo el ancho disponible.
+            onValueChange = { displayName = it },
+            label = { Text("Nombre") },
+            modifier = Modifier.fillMaxWidth()
         )
         // Campo de texto para ingresar el email.
         OutlinedTextField(
-            value = email, // Valor actual del email.
-            onValueChange = { email = it }, // Callback para actualizar el email.
-            label = { Text("Email") }, // Etiqueta del campo.
-            modifier = Modifier.fillMaxWidth() // Ocupa todo el ancho disponible.
+            value = email,
+            onValueChange = { email = it },
+            label = { Text("Email") },
+            modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(8.dp)) // Espaciado entre elementos.
 
         // Campo de texto personalizado para ingresar la contraseña.
         PasswordOutLinedTextField(
-            label = "Contraseña", // Etiqueta del campo.
-            password = password, // Valor actual de la contraseña.
-            onValueChange = { password = it } // Callback para actualizar la contraseña.
+            label = "Contraseña",
+            password = password,
+            onValueChange = { password = it }
         )
 
         // Campo de texto personalizado para confirmar la contraseña.
         PasswordOutLinedTextField(
-            label = "Repite Contraseña", // Etiqueta del campo.
-            password = confirmPassword, // Valor actual de la confirmación de contraseña.
-            onValueChange = { confirmPassword = it } // Callback para actualizar la confirmación.
+            label = "Repite Contraseña",
+            password = confirmPassword,
+            onValueChange = { confirmPassword = it }
         )
         Spacer(modifier = Modifier.height(16.dp)) // Espaciado entre elementos.
 
@@ -100,7 +101,7 @@ fun RegisterScreen(
         Button(onClick = {
             if (password == confirmPassword) {
                 // Si las contraseñas coinciden, llama al método de registro del ViewModel.
-                viewModel.register(email, password)
+                viewModel.register(email, password,displayName)
             } else {
                 // Si no coinciden, actualiza el estado para mostrar el error correspondiente.
                 viewModel.contrasenyaNoConciden()
@@ -114,8 +115,10 @@ fun RegisterScreen(
         if (uiState is AuthState.Success) {
             // Evita múltiples llamados a `onRegisterSuccess` durante recomposiciones.
             if (!viewModel.iniciadaSesion) {
+
                 onRegisterSuccess() // Navega a la siguiente pantalla.
                 viewModel.iniciadaSesion = true // Marca la sesión como iniciada.
+               // viewModel.registraDisplayName(u)
             }
         } else {
             // Muestra el estado actual de la autenticación (cargando, error, etc.).

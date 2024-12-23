@@ -60,17 +60,12 @@ class AuthViewModel : ViewModel() {
         _uiState.value = AuthState.Loading // Cambia el estado a "Cargando"
 
         viewModelScope.launch {
-            val result = Repository.register(email, password) // Realiza la solicitud de registro
+            val result = Repository.register(email, password,displayName) // Realiza la solicitud de registro
 
-             if (result.isSuccess) {
-                 val user = Repository.getCurrentUser()
-                 val profileUpdates = UserProfileChangeRequest.Builder()
-                     .setDisplayName(displayName)
-                     .build()
-                 user?.updateProfile(profileUpdates)?.await()
-                _uiState.value =  AuthState.Success // Registro exitoso
+            _uiState.value =if (result.isSuccess) {
+                AuthState.Success // Registro exitoso
             } else {
-                 _uiState.value = estadoError(result) // Manejo de errores específicos
+                   estadoError(result) // Manejo de errores específicos
             }
         }
     }
@@ -114,6 +109,23 @@ class AuthViewModel : ViewModel() {
      */
     fun logout() {
         Repository.logout()
+    }
+
+    fun registraDisplayName() {
+        //Repository.logout()
+        /*val user = Repository.getCurrentUser()
+        val profileUpdates = UserProfileChangeRequest.Builder()
+            .setDisplayName("Jose Antonio")
+            .build()
+        viewModelScope.launch {
+            val result = Repository.login(email, password) // Realiza la solicitud de login
+            _uiState.value = if (result.isSuccess) {
+                AuthState.Success // Login exitoso
+            } else {
+                estadoError(result) // Manejo de errores específicos
+            }
+        }
+*/
     }
 }
 

@@ -3,6 +3,7 @@ package net.iessochoa.joseantoniolopez.t14_firebase.data.firebase
 import android.util.Log
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 import kotlinx.coroutines.tasks.await
 
 object AutenticacionFireBase {
@@ -35,9 +36,16 @@ object AutenticacionFireBase {
             Result.failure(e) // Manejo de error
         }
     }
-    suspend fun register(email: String, password: String): Result<Unit> {
+    suspend fun register(email: String, password: String, displayName: String=""): Result<Unit> {
         return try {
             firebaseAuth.createUserWithEmailAndPassword(email, password).await()
+           //registramos el nombre de usuario
+            firebaseAuth.currentUser!!.updateProfile(
+                UserProfileChangeRequest
+                    .Builder()
+                    .setDisplayName(displayName)
+                    .build()
+            )?.await()
             Result.success(Unit) // Registro exitoso
         } catch (e: Exception) {
             Result.failure(e) // Manejo de error
