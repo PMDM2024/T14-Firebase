@@ -1,11 +1,7 @@
 package net.iessochoa.joseantoniolopez.t14_firebase.ui.principalscreen
 
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import net.iessochoa.joseantoniolopez.t14_firebase.data.repository.Repository
-import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.AuthState
 
 class PrincipalViewModel: ViewModel()
 {
@@ -16,11 +12,11 @@ class PrincipalViewModel: ViewModel()
         Repository.logout()
     }
     fun getUserEmail(): String  {
-        val user= Repository.getCurrentUser()
-        return " ${ user?.email}"
+        val usuario= Repository.getCurrentUser()
+        return " ${ usuario.email}"
     }
     fun getUserName(): String  {
-        val user= Repository.getCurrentUser()
-        return "${user?.displayName}"
+        val usuario= Repository.getCurrentUser()
+        return "${usuario.nombre}"
     }
 }

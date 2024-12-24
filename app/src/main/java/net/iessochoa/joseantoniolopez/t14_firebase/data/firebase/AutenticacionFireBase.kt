@@ -4,6 +4,8 @@ package net.iessochoa.joseantoniolopez.t14_firebase.data.firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import kotlinx.coroutines.tasks.await
+import net.iessochoa.joseantoniolopez.t14_firebase.data.model.Usuario
+import net.iessochoa.joseantoniolopez.t14_firebase.data.repository.Repository.getCurrentUser
 import net.iessochoa.joseantoniolopez.t14_firebase.ui.auth.components.esCorrectoEmail
 
 /**
@@ -80,9 +82,17 @@ object AutenticacionFireBase {
 
     /**
      * Obtiene el usuario actualmente autenticado en Firebase.
-     * @return El usuario actual o null si no hay un usuario autenticado.
+     * @return El usuario actual o """" si no hay un usuario autenticado.
      */
-    fun getCurrentUser() = firebaseAuth.currentUser
+  // fun getCurrentUser() = firebaseAuth.currentUser
+    fun getCurrentUser(): Usuario {
+        val usr=firebaseAuth.currentUser
+        return if(usr!=null)
+            Usuario(usr.displayName?:"",usr.email?:"")
+        else
+            Usuario("","")
+
+    }
 
     /**
      * Cierra la sesión del usuario actualmente autenticado.
@@ -91,8 +101,11 @@ object AutenticacionFireBase {
         firebaseAuth.signOut() // Cierra la sesión del usuario.
     }
 
+    /**
+     * Verifica si el usuario está actualmente autenticado en Firebase.
+     */
     fun estaLogueado(): Boolean {
-        return getCurrentUser()!=null
+        return firebaseAuth.currentUser!=null
     }
 
 }
