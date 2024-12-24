@@ -5,21 +5,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.UserProfileChangeRequest
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import net.iessochoa.joseantoniolopez.t14_firebase.data.repository.Repository
 import net.iessochoa.joseantoniolopez.t14_firebase.ui.components.ActionItem
 import net.iessochoa.joseantoniolopez.t14_firebase.ui.components.AppBar
 
@@ -40,12 +33,13 @@ fun PrincipalScreen(
             name = "Cerra Sesión",
             icon = Icons.Filled.ExitToApp,
             action = {
-                viewModel.logout()
+                viewModel.cerrarSesion()
                 onLogout()
             }
         )
    )
-    //val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
+
     Scaffold(
         topBar = {
             AppBar(
@@ -58,8 +52,8 @@ fun PrincipalScreen(
         Box(modifier = Modifier.padding(padding)) {
             Column(modifier = Modifier.padding(16.dp)) {
 
-                Text(text = "Nombre : ${viewModel.getUserName()} ")
-                Text(text = "Email: ${viewModel.getUserEmail()}")
+                Text(text = "Nombre : ${uiState.usuario.nombre} ")
+                Text(text = "Email: ${uiState.usuario.email}")
             }
         }
 
